@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Translation Tool</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>🌍 Language Translation Tool</h1>
+
+    <textarea id="text" placeholder="Entrez votre texte ici..."></textarea>
+
+    <select id="source">
+        <option value="auto">Détection automatique</option>
+        <option value="fr">Français</option>
+        <option value="en">Anglais</option>
+        <option value="es">Espagnol</option>
+    </select>
+
+    <select id="target">
+        <option value="fr">Français</option>
+        <option value="en">Anglais</option>
+        <option value="es">Espagnol</option>
+    </select>
+
+    <button onclick="translateText()">Traduire</button>
+
+    <h3>Résultat :</h3>
+    <div id="result"></div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+  </html>
