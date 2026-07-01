@@ -1,101 +1,50 @@
-// Remplir automatiquement la liste des langues cibles
 window.onload = function () {
-    const source = document.getElementById("source");
-    const target = document.getElementById("target");
+  const source = document.getElementById("sourceLang");
+  const target = document.getElementById("targetLang");
 
-    target.innerHTML = "";
+  target.innerHTML = "";
 
-    for (let i = 1; i < source.options.length; i++) {
-        target.appendChild(source.options[i].cloneNode(true));
-    }
+  for (let i = 1; i < source.options.length; i++) {
+    target.appendChild(source.options[i].cloneNode(true));
+  }
 
-    target.value = "fr";
+  target.value = "en";
 };
 
-// Traduction
-async function translateText() {
+async function traduireTexte() {
+  const texte = document.getElementById("text").value;
+  const source = document.getElementById("sourceLang").value;
+  const target = document.getElementById("targetLang").value;
+  const resultat = document.getElementById("result");
 
-    const text = document.getElementById("text").value.trim();
-    const source = document.getElementById("source").value;
-    const target = document.getElementById("target").value;
-    const result = document.getElementById("result");
+  if (!texte) {
+    alert("Veuillez saisir un texte.");
+    return;
+  }
 
-    if (text === "") {
-        alert("Veuillez saisir un texte.");
-        return;
-    }
+  resultat.innerHTML = "⏳ Traduction...";
 
-    result.innerHTML = "⏳ Traduction en cours...";
+  try {
+    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Authorization": "Bearer " + CLE_API_OPENROUTER,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "openai/gpt-4o-mini",
+        messages: [
+          {
+            role: "user",
+            content: `Translate this text from ${source} to ${target}: ${texte}`
+          }
+        ]
+      })
+    });
 
-    try {
-
-        const response = await fetch("https://libretranslate.com/translate", {
-
-            method: "POST",
-
-            headers: {
-                "Content-Type": "application/json"
-            },
-
-            body: JSON.stringify({
-                q: text,
-                source: source,
-                target: target,
-                format: "text"
-            })
-
-        });
-
-        if (!response.ok) {
-            throw new Error("Erreur serveur");
-        }
-
-        const data = await response.json();
-
-        result.innerHTML = `
-            <div class="translation-box">
-                ${data.translatedText}
-            </div>
-        `;
-
-    } catch (error) {
-
-        result.innerHTML =
-        "❌ Impossible de traduire. Vérifiez votre connexion Internet ou réessayez plus tard.";
-
-    }
-
-}
-
-// Copier la traduction
-function copyTranslation() {
-
-    const text = document.getElementById("result").innerText;
-
-    if (text.trim() === "") {
-        alert("Aucune traduction à copier.");
-        return;
-    }
-
-    navigator.clipboard.writeText(text);
-
-    alert("✅ Traduction copiée.");
-
-}
-
-// Échanger les langues
-function swapLanguages() {
-
-    const source = document.getElementById("source");
-    const target = document.getElementById("target");
-
-    const temp = source.value;
-
-    source.value = target.value;
-
-    target.value = temp;
-
-            }
-
-        
+    const data = await response.json();
+    resultat.innerHTML = data.choices[0].message.content;
+  } catch (e) {
+    resultat.innerHTML = "Erreur : " + e.message;
+  }
 }
