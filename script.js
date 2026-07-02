@@ -1,4 +1,4 @@
-window.onload = function () {
+        window.onload = function () {
   const source = document.getElementById("source");
   const target = document.getElementById("target");
 
@@ -10,6 +10,8 @@ window.onload = function () {
 
   target.value = "en";
 };
+
+const OPENROUTER_API_KEY = "TA_CLE_ICI";
 
 async function traduireTexte() {
   const texte = document.getElementById("text").value;
@@ -28,7 +30,7 @@ async function traduireTexte() {
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
       headers: {
-        "Authorization": "Bearer " + CLE_API_OPENROUTER,
+        "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
@@ -50,34 +52,8 @@ async function traduireTexte() {
     }
 
     resultat.innerHTML = data.choices[0].message.content;
+
   } catch (e) {
-    resultat.innerHTML = "Erreur : " + e.message;
-    const OPENROUTER_API_KEY = "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";
-
-async function chatWithAI() {
-  try {
-    const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${OPENROUTER_API_KEY}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model: "openai/gpt-4o-mini",
-        messages: [
-          { role: "user", content: "Salut, comment ça va ?" }
-        ]
-      })
-    });
-
-    const data = await response.json();
-    console.log(data.choices[0].message.content);
-  } catch (error) {
-    console.error("Erreur :", error);
+    resultat.innerHTML = "Erreur réseau : " + e.message;
   }
 }
-
-chatWithAI();
-  }
-  }
-
