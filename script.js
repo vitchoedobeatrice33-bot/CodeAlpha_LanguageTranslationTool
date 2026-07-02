@@ -1,6 +1,6 @@
 window.onload = function () {
-  const source = document.getElementById("sourceLang");
-  const target = document.getElementById("targetLang");
+  const source = document.getElementById("source");
+  const target = document.getElementById("target");
 
   target.innerHTML = "";
 
@@ -13,8 +13,8 @@ window.onload = function () {
 
 async function traduireTexte() {
   const texte = document.getElementById("text").value;
-  const source = document.getElementById("sourceLang").value;
-  const target = document.getElementById("targetLang").value;
+  const source = document.getElementById("source").value;
+  const target = document.getElementById("target").value;
   const resultat = document.getElementById("result");
 
   if (!texte) {
@@ -43,8 +43,14 @@ async function traduireTexte() {
     });
 
     const data = await response.json();
+
+    if (data.error) {
+      resultat.innerHTML = "Erreur : " + data.error.message;
+      return;
+    }
+
     resultat.innerHTML = data.choices[0].message.content;
   } catch (e) {
     resultat.innerHTML = "Erreur : " + e.message;
   }
-}
+  }
