@@ -11,7 +11,7 @@ window.onload = function () {
   target.value = "en";
 };
 
-const OPENROUTER_API_KEY = "TA_CLE_ICI";
+const OPENROUTER_API_KEY = "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";
 
 async function traduireTexte() {
   const texte = document.getElementById("text").value;
