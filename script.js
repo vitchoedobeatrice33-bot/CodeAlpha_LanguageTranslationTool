@@ -13,7 +13,7 @@ window.onload = function () {
   target.value = "en";
 };
 
-const OPENROUTER_API_KEY = "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";
+const OPENROUTER_API_KEY = "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";
 
 async function traduireTexte() {
   const texte = document.getElementById("text");
@@ -62,4 +62,4 @@ async function traduireTexte() {
 
   } catch (e) {
     resultat.innerHTML = "Erreur réseau : " + e.message;
-}
+     }
