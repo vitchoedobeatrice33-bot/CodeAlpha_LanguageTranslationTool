@@ -2,24 +2,31 @@ window.onload = function () {
   const source = document.getElementById("source");
   const target = document.getElementById("target");
 
+  if (!source || !target) return;
+
   target.innerHTML = "";
 
-  for (let i = 1; i < source.options.length; i++) {
+  for (let i = 0; i < source.options.length; i++) {
     target.appendChild(source.options[i].cloneNode(true));
   }
 
   target.value = "en";
 };
 
-const OPENROUTER_API_KEY = "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";
+const OPENROUTER_API_KEY = "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";
 
 async function traduireTexte() {
-  const texte = document.getElementById("text").value;
-  const source = document.getElementById("source").value;
-  const target = document.getElementById("target").value;
+  const texte = document.getElementById("text");
+  const source = document.getElementById("source");
+  const target = document.getElementById("target");
   const resultat = document.getElementById("result");
 
-  if (!texte) {
+  if (!texte || !source || !target || !resultat) {
+    alert("Erreur: éléments HTML manquants");
+    return;
+  }
+
+  if (!texte.value) {
     alert("Veuillez saisir un texte.");
     return;
   }
@@ -38,7 +45,7 @@ async function traduireTexte() {
         messages: [
           {
             role: "user",
-            content: `Translate this text from ${source} to ${target}: ${texte}`
+            content: `Translate the following text from ${source.value} to ${target.value}. Only return the translation:\n\n${texte.value}`
           }
         ]
       })
@@ -46,12 +53,13 @@ async function traduireTexte() {
 
     const data = await response.json();
 
-    if (data.error) {
-      resultat.innerHTML = "Erreur : " + data.error.message;
+    if (!response.ok || data.error) {
+      resultat.innerHTML = "Erreur API : " + (data.error?.message || "inconnue");
       return;
     }
 
     resultat.innerHTML = data.choices[0].message.content;
 
   } catch (e) {
-    resultat.innerHTML = "Erreur réseau : " + e.message;} }
+    resultat.innerHTML = "Erreur réseau : " + e.message;
+}
