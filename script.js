@@ -62,4 +62,5 @@ async function traduireTexte() {
 
   } catch (e) {
     resultat.innerHTML = "Erreur réseau : " + e.message;
-     }
+  }
+}
