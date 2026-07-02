@@ -1,4 +1,4 @@
-        window.onload = function () {
+window.onload = function () {
   const source = document.getElementById("source");
   const target = document.getElementById("target");
 
@@ -56,4 +56,4 @@ async function traduireTexte() {
   } catch (e) {
     resultat.innerHTML = "Erreur réseau : " + e.message;
   }
-}
+          }        
